@@ -3,14 +3,11 @@
 require (prefix-in (racket/
                     racket))
 
-provide (< >
-         branch)
-
-define (<)
-  (with-arity (racket/<) 2)
-
-define (>)
-  (with-arity (racket/>) 2)
+provide (branch
+         compare)
 
 define (branch t e c)
   (if c t e)
+
+define (compare l e g a b)
+  (if < a b l (if > a b g e))

@@ -6,6 +6,7 @@ require (racket/stream
 provide (stream/empty
          stream/cons
          stream/fold
+         stream/next-else
          stream/next
          stream/split
          stream/take
@@ -21,9 +22,12 @@ define (stream/empty)
 define (stream/cons head (rest))
   (racket (stream-cons #:eager (kihi head) (kihi rest)))
 
-define (stream/next (f))
-  (branch (drop) (f stream-first under (stream-rest) copy)
+define (stream/next-else (f) (g))
+  (branch (g drop) (f stream-first under (stream-rest) copy)
           stream-empty? copy)
+
+define (stream/next f)
+  (stream/next-else f ())
 
 define (stream/fold f)
   (stream/next (stream/fold f under f swap))
